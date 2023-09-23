@@ -7,8 +7,8 @@ class Oppa:
         self.goto_point=None
     def toNumber(self,code:str):
         result=code
-        for i in self.vars:
-            result=result.replace(i+' 뭐야?',str(self.vars[i]))
+        for i,j in self.vars.items():
+            result=result.replace(str(i)+' 뭐야?',str(j))
         try:
             if re.fullmatch('[0-9+\-*)( ]+', result):
                 return eval(result)
@@ -45,6 +45,8 @@ class Oppa:
             return 'GOTO'
         return 'No',0
     def compileLine(self,code:str):
+        if code=='':
+            sys.exit()
         if not code.startswith('오빠, 오빠, 오빠 '):
             sys.exit("오빠, 오빠, 오빠 나 불러!\n\t"+code+'<-')
         raw_code=code[11:]
@@ -75,11 +77,11 @@ class Oppa:
             print(chr(types[1]),end='')
         if types[0]=='INPUT_NUMBER':
             try:
-                self.vars[type[1]]=int(input(':'))
+                self.vars[types[1]]=int(input(':'))
             except:
                 sys.exit('오빠, 오빠, 오빠 정수만 입력해\n\t'+code+'<-')
         if types[0]=='INPUT_CHAR':
-            self.vars[type[1]]=ord(input(':'))
+            self.vars[types[1]]=ord(input(':'))
         if types[0]=='DEF_AND_RESET':
             self.vars[types[1]]=types[2]
         if types=='GOTO':
