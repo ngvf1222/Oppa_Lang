@@ -26,23 +26,23 @@ class Oppa:
             return 'DEF',code[:-3]
         if code.endswith(' 있어?'):
             return 'NO_OVER_LOADING_DEF',code[:-4]
-        if code.endswith(' 집 어디야?') or code=='집 어디야?':
-            if code=='집 어디야?':
-                return 'IF_GOTO',''
+        if code.endswith(' 집 어디야?'):
             return 'IF_GOTO',code[:-7]
         if code.startswith('집 '):
             return 'GOTO_POINT_SET',self.toNumber(code[2:])
-        if code.endswith(' 좀 쩔어~'):
-            return 'PRINT_NUMBER',self.toNumber(code[:-6])
-        if code.endswith(' 좀 쩔지~'):
-            return 'PRINT_CHAR',self.toNumber(code[:-6])
+        if code.endswith(' 좋아~'):
+            return 'PRINT_NUMBER',self.toNumber(code[:-4])
+        if code.endswith(' 좋아~~'):
+            return 'PRINT_CHAR',self.toNumber(code[:-5])
         if code.endswith(' 뭐야??'):
-            return 'INPUT_NUMBER',code[:-4]
+            return 'INPUT_NUMBER',code[:-5]
         if code.endswith(' 뭐야???'):
-            return 'INPUT_CHAR',code[:-4]
+            return 'INPUT_CHAR',code[:-6]
         NUMBER=' '.join(code.split(' ')[1:])
         if NUMBER[0]=='(' and NUMBER[-1]==')' or NUMBER.isdigit():
             return 'DEF_AND_RESET',code.split(' ')[0],self.toNumber(NUMBER)
+        if code=='꽉 잡아~':
+            return 'GOTO'
         return 'No',0
     def compileLine(self,code:str):
         if not code.startswith('오빠, 오빠, 오빠 '):
@@ -82,7 +82,11 @@ class Oppa:
             self.vars[type[1]]=ord(input(':'))
         if types[0]=='DEF_AND_RESET':
             self.vars[types[1]]=types[2]
-        #print(raw_code,self.vars)
+        if types=='GOTO':
+            if not self.goto_point:
+                sys.exit('오빠, 오빠, 오빠 어디가?\n\t'+code+'<-')
+            return self.goto_point
+        #print(raw_code,self.vars,self.goto_point)
     def compile(self,code):
         line_codes=code.split('\n')
         i=0
