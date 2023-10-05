@@ -7,10 +7,10 @@ class Oppa:
         self.goto_point=None
     def toNumber(self,code:str):
         result=code
-        for i,j in self.vars.items():
-            result=result.replace(str(i)+' 뭐야?',str(j))
+        for var_name,var_value in self.vars.items():
+            result=result.replace(str(var_name)+' 뭐야?',str(var_value))#변수 치환
         try:
-            if re.fullmatch('[0-9+\-*)( ]+', result):
+            if re.fullmatch('[0-9+\-*)( ]+', result):#수식 검증(괄호 관련 기능은 미흡)
                 return eval(result)
             else:
                 sys.exit('오빠, 오빠, 오빠 계산이 이상해!\n\t'+code+'     <-')
@@ -94,12 +94,12 @@ class Oppa:
         i=0
         while i<len(line_codes):
             #print(line_codes[i],self.vars)
-            jp=self.compileLine(line_codes[i])
+            jump_point=self.compileLine(line_codes[i])
             #print(jp)
             i+=1
-            if jp:
-                i=jp-1
-        return jp
+            if jump_point:
+                i=jump_point-1
+        return jump_point
 if __name__=='__main__':
     example_code="""오빠, 오빠, 오빠 i 있어
 오빠, 오빠, 오빠 j 있어
